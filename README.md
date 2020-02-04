@@ -1,6 +1,6 @@
 # SoulKnightHelper
 
-当使用 OpenVPN、WireGuard 等创建远程局域网环境是，利用联机小工具将房主的广播包转发到 VPN 局域网环境内，从而使得客户端能够发现房主的房间。
+当使用 OpenVPN、WireGuard 等创建远程局域网环境时，利用联机小工具将房主的广播包转发到 VPN 局域网环境内，从而使得客户端能够发现房主的房间。
 
 脚本支持 Android 与 iOS。
 
