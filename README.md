@@ -1,6 +1,8 @@
 # SoulKnightHelper
 
-元气骑士联机小工具（支持安卓，iOS）
+当使用 OpenVPN、WireGuard 等创建远程局域网环境是，利用联机小工具将房主的广播包转发到 VPN 局域网环境内，从而使得客户端能够发现房主的房间。
+
+脚本支持 Android 与 iOS。
 
 ## 原理
 
@@ -22,42 +24,11 @@
 
 然而元气骑士并不会在 VPN 运行的 Interface 上进行广播，所以需要联机小工具监听广播包并将广播包转发到客户端，此后可以正常联机。
 
-## iOS 上的联机小工具
+## 联机小工具
 
-- 在 App Store 里面下载名为 Python3IDE 的应用
-- 粘贴如下代码，将里面的三个 IP 改为对应客户端 IP，如果不足三个可以留空
+- 在 App Store 里面下载名为 Python3IDE 的应用（安卓请找对应的 Python IDE），并将 `main.py` 导入该应用
+- 修改 `players`，将里面的三个 IP 改为对应客户端 IP，如果不足三个可以留空
 - 点击右上角运行即可
-
-```python
-import socket
-
-PORT = 23333
-
-def startRelayServer(players):
-    hostRecv = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    hostRecv.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST or socket.SO_REUSEADDR, 1)
-    
-    try:
-        hostRecv.bind(("", PORT))
-    except Exception as e:
-        print("Port has been occupied, please run the script before hosting the game.")
-        return
-    
-    players = [player for player in players if player != ""]
-    socks = [socket.socket(socket.AF_INET, socket.SOCK_DGRAM) for i in players]
-    print("Relay server started, now host your game.")
-
-    while True:
-        for i in range(len(players)):
-            hostData, hostAddr = hostRecv.recvfrom(1024)
-            if len(hostData) > 0 and hostAddr[0] not in players:
-                socks[i].sendto(hostData, (players[i], PORT))
-                print(f"Broadcast package received, sending to {players[i]}.")
-
-if __name__ == "__main__":
-    players = ["10.8.0.3", "10.8.0.4", ""] # 不足三个则留空
-    startRelayServer(players)
-```
 
 ## 使用流程
 
